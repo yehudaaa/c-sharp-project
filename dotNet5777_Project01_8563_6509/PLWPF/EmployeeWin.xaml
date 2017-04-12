@@ -1,0 +1,110 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PLWPF"
+             xmlns:BE="clr-namespace:BE;assembly=BE" x:Class="PLWPF.EmployeeWin"
+             mc:Ignorable="d" 
+             d:DesignHeight="432" d:DesignWidth="950" Loaded="UserControl_Loaded">
+    <Grid >
+        <Grid.Resources>
+            <local:notToBoolian x:Key="_notToBoolian"/>
+            <local:boolianToVisibility x:Key="_boolianToVisibility"/>
+            <local:BaccountTostring x:Key="baccountTostring"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="0,1,0,-1" Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="135*"/>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="138*"/>
+                <ColumnDefinition Width="163*"/>
+                <ColumnDefinition Width="163*"/>
+                <ColumnDefinition Width="161*"/>
+                <ColumnDefinition Width="165*"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="Black" BorderThickness="2">
+                <StackPanel >
+                    <StackPanel />
+                    <RadioButton x:Name="add_employee"  Content="Add" Margin="10" FontSize="20" IsChecked="True" Checked="add_employee_Checked"/>
+                    <RadioButton x:Name="delete_employee" Content="Delete" Margin="10" FontSize="20" Checked="delete_employee_Checked"/>
+                    <RadioButton x:Name="update_employee" Content="Update" Margin="10" FontSize="20" Checked="update_employee_Checked"/>
+                </StackPanel>
+            </Border>
+            <ComboBox x:Name="list_comboBox" Height="25" VerticalAlignment="Top" IsEnabled="{Binding ElementName=add_employee, Path=IsChecked, Converter={StaticResource _notToBoolian}}" Grid.Column="1" Grid.ColumnSpan="6" SelectionChanged="list_comboBox_SelectionChanged"/>
+            <StackPanel Grid.Column="2" Margin="5,25,0,0">
+                <Label Content="ID: *" Grid.Column="0" HorizontalAlignment="Left" Margin="5,10,0,0"/>
+                <Label Content="First Name: *" Margin="5,4,0,0"/>
+                <Label Content="Last Name: *" Margin="5" />
+                <Label Content="Gender: *" Margin="5"/>
+                <Label Content="Birth Date: *"  Margin="5"/>
+                <Label Content="Married:" Margin="5" />
+                <Label Content="Phone Number:" Margin="5" />
+                <Label Content="Email: *" Margin="5" />
+                <Label Content="Address: " Margin="5"/>
+            </StackPanel>
+            <StackPanel Grid.Column="3" Margin="0,25,0,0">
+                <TextBox x:Name="iDTextBox" Margin="0,7,0,0" Validation.Error="TextBox_Error" IsEnabled="{Binding ElementName=add_employee, Path=IsChecked}" Text="{Binding ID ,NotifyOnValidationError=true, ValidatesOnExceptions=true}" Height="24" Width="140" HorizontalAlignment="Left" TextChanged="txtNum_TextChanged"/>
+                <TextBox x:Name="firstNameTextBox" Height="24" Margin="0,10,0,0" IsEnabled="{Binding ElementName=update_employee, Path=IsChecked, Converter={StaticResource _notToBoolian}}" Text="{Binding FirstName, Mode=OneWay}" VerticalAlignment="Center" Width="140" HorizontalAlignment="Left"/>
+                <TextBox x:Name="lastNameTextBox"  Height="24" Margin="0,8,0,0" Text="{Binding LastName}" Width="140" HorizontalAlignment="Left"/>
+                <ComboBox x:Name="genderComboBox" IsEnabled="{Binding ElementName=update_employee, Path=IsChecked, Converter={StaticResource _notToBoolian}}" SelectedItem="{Binding Gender}" Height="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" Width="140">
+
+                </ComboBox>
+                <DatePicker x:Name="birthDateDatePicker" IsEnabled="{Binding ElementName=update_employee, Path=IsChecked, Converter={StaticResource _notToBoolian}}" Height="24" Margin="0,11" Width="140"  SelectedDate="{Binding BirthDate, Mode=OneWay}" Validation.Error="TextBox_Error" HorizontalAlignment="Left"/>
+                <CheckBox x:Name="marriedCheckBox" HorizontalAlignment="Left"  IsChecked="{Binding Married, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,5,0,0" />
+                <TextBox x:Name="phoneNumberTextBox" Margin="0,18,0,0" HorizontalAlignment="Left" Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=Explicit}" Height="24" Width="140" TextChanged="txtNum_TextChanged"/>
+                <TextBox x:Name="emailTextBox"  Margin="0,15,0,0" HorizontalAlignment="Left" Text="{Binding Email}" Height="24" Width="140"/>
+                <TextBox x:Name="addressTextBox" Text="{Binding Address}" Width="140" Margin="0,10" HorizontalAlignment="Left" Height="24"/>
+            </StackPanel>
+            <StackPanel Grid.Column="4" Margin="10,22,0,0">
+                <Label Content="Education: *" Margin="5,7,0,0" Grid.Row="1"/>
+                <Label Content="Specialization: *" Margin="5"/>
+                <Label Content="Years of Experience:"  Margin="5" />
+                <Label Content="Army Service:" Margin="5"/>
+            </StackPanel>
+            <StackPanel Grid.Column="5" Margin="10,22,0,0">
+                <ComboBox x:Name="educationTextBox" HorizontalAlignment="Left" Height="24" Margin="0,8,0,0" Text="{Binding Education, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Width="140"/>
+                <ComboBox x:Name="specializationNumberComboBox" DisplayMemberPath="SpecializationNumber" HorizontalAlignment="Left" Height="Auto" ItemsSource="{Binding}" Margin="0,9,0,0" Width="140"/>
+
+
+                <TextBox x:Name="yearsExperienceTextBox" HorizontalAlignment="Left" Validation.Error="TextBox_Error" Height="24" Margin="0,12,0,0" Text="{Binding YearsExperience, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Width="140" TextChanged="txtNum_TextChanged"/>
+                <CheckBox x:Name="armyServiceCheckBox" Content="" HorizontalAlignment="Left" IsChecked="{Binding ArmyService, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Margin="0,15,0,0"/>
+            </StackPanel>
+            <StackPanel Grid.Column="6" Margin="10,22,0,0" Orientation="Vertical" Grid.Row="1">
+                <Button x:Name="addBankAccount" Content="add Bank Account" Height="24" Width="120"  Margin="0,8,0,0" Click="addBankAccount_Click" Background="{StaticResource smallButton}"/>
+                <Label x:Name="bankAccountDetail" BorderBrush="Black" IsEnabled="False" Margin="18,12,17,0"  Height="150" Width="120" 
+                         Content="{Binding BAccount}"/>
+                <Button x:Name="add_Click" Visibility="{Binding IsChecked, Converter={StaticResource _boolianToVisibility}, ElementName=add_employee}" Height="24" Content="הוסף"  Margin="26,95,0,0"  Width="75" Click="add_click" Background="{StaticResource smallButton}" >
+                    <Button.Style>
+                        <Style >
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=iDTextBox, Path=Text}" Value="">
+                                    <Setter Property="Button.IsEnabled" Value="false"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=firstNameTextBox, Path=Text}" Value="">
+                                    <Setter Property="Button.IsEnabled" Value="false"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=lastNameTextBox, Path=Text}" Value="">
+                                    <Setter Property="Button.IsEnabled" Value="false"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <TextBlock x:Name="textBlock"  Text="Employee Managment" FontSize="25" VerticalAlignment="Center" Margin="10"/>
+        <Button x:Name="deleteButton_Click" Visibility="{Binding ElementName=delete_employee, Path=IsChecked, Converter={StaticResource _boolianToVisibility}}" Grid.Row="1" IsEnabled="{Binding ElementName=delete_employee, Path=IsChecked}" Height="24" Content="מחק"  Margin="820,289,0,0"  Width="75" Click="delete_click" Background="{StaticResource smallButton}"/>
+        <Button x:Name="updateButton_Click" Visibility="{Binding ElementName=update_employee, Path=IsChecked, Converter={StaticResource _boolianToVisibility}}" Grid.Row="1" IsEnabled="{Binding ElementName=update_employee, Path=IsChecked}" Height="24" Content="עדכן"  Margin="820,289,0,0"  Width="75" Click="update_click" Background="{StaticResource smallButton}"/>
+
+        <TextBlock  Visibility="{Binding ElementName=add_employee, Path=IsChecked, Converter={StaticResource _boolianToVisibility}}" Height="30" Text="to add employee please fill the all following fields:" FontSize="20" Margin="325,30,25,12"/>
+        <TextBlock  Visibility="{Binding ElementName=delete_employee, Path=IsChecked, Converter={StaticResource _boolianToVisibility}}"  Height="30" Text="to delete employee please choose one from the comboBox:" FontSize="20" Margin="325,30,25,12"/>
+        <TextBlock  Visibility="{Binding ElementName=update_employee, Path=IsChecked, Converter={StaticResource _boolianToVisibility}}" Height="30" Text="to update employee please choose one from the comboBox:" FontSize="20" Margin="325,30,25,12"/>
+
+    </Grid>
+</UserControl>
+ 
